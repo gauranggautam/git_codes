@@ -1,5 +1,5 @@
 import os
-def plot_spectrum(input, compare=False, fig=55):
+def plot_spectrum(input, compare=False, fig=55,id=''):
     filename = input
     v=readfile(os.path.join(input_dir, filename),encoding='latin1',multi_sweep='force')
     #Compare mode
@@ -8,7 +8,7 @@ def plot_spectrum(input, compare=False, fig=55):
         ax=plt.gca()
     else:
         fig, ax = plt.subplots()
-    spectr=plot(v[1],v[2],label=os.path.basename(filename))
+    spectr=plot(v[1],v[2],label=f({id}'_'{os.path.basename(filename)}))
     ax.set_xlim(min(v[1]),max(v[1]))
     ax.set_xlabel('Wavelength (nm)')
     ax.set_ylabel('Counts (Arb.)')
