@@ -8,7 +8,7 @@ def plot_spectrum(input, compare=False, fig=55,id=''):
         ax=plt.gca()
     else:
         fig, ax = plt.subplots()
-    spectr=plot(v[1],v[2],label=((id)_(os.path.basename(filename))))
+    spectr=plot(v[1],v[2],label=os.path.basename(filename))
     ax.set_xlim(min(v[1]),max(v[1]))
     ax.set_xlabel('Wavelength (nm)')
     ax.set_ylabel('Counts (Arb.)')
