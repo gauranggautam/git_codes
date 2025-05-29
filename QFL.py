@@ -48,7 +48,7 @@ def plot_plmap(input, mode='custom', flog=False, xi=0, yi=2, zi=6):
     ax.set_ylabel('Y (in um)')
     ax.set_title(os.path.basename(filename))
 
-#Polarization
+#Polarization (not done)
 def plot_polarization(input, polar=True, mode='custom', flog=False, xi=0, yi=1):
     filename=input
     v=readfile(filename,encoding='latin1',multi_sweep='force')
