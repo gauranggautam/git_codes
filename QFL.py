@@ -1,5 +1,5 @@
 import os
-def plot_spectrum(input, compare=False, fig=55,id=''):
+def plot_spectrum(input, compare=False, fig=55,id='Plot'):
     filename = input
     v=readfile(os.path.join(input_dir, filename),encoding='latin1',multi_sweep='force')
     #Compare mode
