@@ -1,5 +1,19 @@
 import os
-def plot_spectrum(input, compare=False, fig=55,id='Plot'):
+import matplotlib.pyplot as plt
+
+sz = 25  # Font size
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['font.size'] = sz
+plt.rcParams['font.weight'] = 'bold'
+plt.rcParams['axes.labelweight'] = 'bold'
+plt.rcParams['axes.titlesize'] = sz
+plt.rcParams['axes.titleweight'] = 'bold'
+plt.rcParams['axes.labelsize'] = sz
+plt.rcParams['legend.fontsize'] = sz
+plt.rcParams['xtick.labelsize'] = sz
+plt.rcParams['ytick.labelsize'] = sz
+
+def plot_spectrum(input, compare=False, fig=11,id='Plot'):
     filename = input
     v=readfile(os.path.join(input_dir, filename),encoding='latin1',multi_sweep='force')
     #Compare mode
@@ -19,7 +33,7 @@ def plot_spectrum(input, compare=False, fig=55,id='Plot'):
     else:
         ax.set_title(os.path.basename(filename))
 #Ongoing+plot PLmap        
-def plot_plmap(input, mode='custom', flog=False, xi=0, yi=2, zi=6):
+def plot_plmap(input, mode='custom', flog=False, xi=0, yi=2, zi=6, id='Plot'):
 
     filename=input
     v=readfile(filename,encoding='latin1',multi_sweep='force')
@@ -46,7 +60,46 @@ def plot_plmap(input, mode='custom', flog=False, xi=0, yi=2, zi=6):
     ax.invert_yaxis()
     ax.set_xlabel('X (in um)')
     ax.set_ylabel('Y (in um)')
-    ax.set_title(os.path.basename(filename))
+    ax.set_title(f'{id}_{os.path.basename(filename)}')
+
+
+
+#Power dependance Plot works for APD for now
+#1. Index for APDs: (5,4)
+#2. index for Spectro without waveband: (2,6) (check against the file)
+#3. index for Spectro with waveband(0): (2,7) (check against the file)
+def plot_powerd(input, compare=False, fig=66,mode='custom', xi=2, yi=5,id='Plot'):
+    filename=input
+    v=readfile(filename,encoding='latin1',multi_sweep='force')
+    if mode == 'apd':
+        x_index, y_index=2,5
+    elif mode == 'spec' :
+        x_index, y_index=2,6
+    elif mode == 'specw' :
+        x_index, y_index=5,7
+    else:
+        x_index, y_index= xi,yi
+        
+    x, y = v[x_index], v[y_index]-min(v[y_index])
+
+    if compare:
+        figure(fig)
+        ax=plt.gca()
+        ax.plot(x*1000, y, label=f'{id}_{os.path.basename(filename)}')
+        ax.set_title(f'Power dependance comparison')
+        plt.legend(loc='upper left')
+        plt.legend()
+
+    else:
+        fig, ax = plt.subplots()
+        ax.plot(x*1000, y)
+        ax.set_title(f'Power dependance for {os.path.basename(filename)}')
+    
+    ax.set_xlabel('Power (mW)')
+    ax.set_ylabel('Counts (a.u.)')
+    ax.set_xlim(0,None)
+    ax.set_ylim(0,None)
+    
 
 #Polarization (not done)
 def plot_polarization(input, polar=True, mode='custom', flog=False, xi=0, yi=1):
