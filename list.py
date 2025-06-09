@@ -16,6 +16,6 @@ for file in sweeps_filename:
     plt.figure()
     plt.pcolor(m[0], m[1],m[2])
     plt.colorbar()
-    plt.title(full_file)
+    plt.title(file)
     plt.savefig(f'{full_file[:-1]}_.png')
 
