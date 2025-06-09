@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-sweeps_filename = ['TG5_SweepX+Vgg_Vg1=0_Vg2=0_Vb=0_20250607-164406.txt',
+sweeps_filename = ['TG5_SweepX+Vgg_Vg1=0_Vg2=0_Vb=0_20250607-164406',
 'TG5_SweepX+Vgg_Vg1=-10_Vg2=10_Vb=0_',
 'TG5_SweepX+Vgg_Vg1=10_Vg2=-10_Vb=0_',
 'TG5_SweepX+Vgg_Vg1=-10_Vg2=-10_Vb=0_',
@@ -16,5 +16,5 @@ for file in sweeps_filename:
     plt.pcolor(m[0], m[1],m[2])
     plt.colorbar()
     plt.title(full_file)
-    plt.savefig(f'{full_file}_{datetime.now()}.png')
+    plt.savefig(f'{full_file[-1]}_{datetime.now()}.png')
     
