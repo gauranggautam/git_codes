@@ -10,14 +10,15 @@ sweeps_filename = ['TG5_SweepX+Vgg_Vg1=0_Vg2=0_Vb=0_20250607-164406',
 prefix = "C:\Data\Emile/20250606"
 
 plt.figure()
-fig, axes = plt.subplot(2,3)
+fix, axes = plt.subplot(2,3)
+i=j=0
 for file in sweeps_filename:
     full_file = f'{prefix}\{file}*' 
     print(full_file)
     m=readfile(full_file)
     
-    axes.pcolor(m[0], m[1],m[2])
-    axes.colorbar()
-    axes.title(file)
-    fig.savefig(f'{full_file[:-1]}_.png')
+    axes[]plt.pcolor(m[0], m[1],m[2])
+    plt.colorbar()
+    plt.title(file)
+    plt.savefig(f'{full_file[:-1]}_.png')
 
