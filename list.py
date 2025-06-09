@@ -1,12 +1,12 @@
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-sweeps_filename = ['TG5_SweepX+Vgg_Vg1=0_Vg2=0_Vb=0_.txt',
-'TG5_SweepX+Vgg_Vg1=-10_Vg2=10_Vb=0_.txt',
-'TG5_SweepX+Vgg_Vg1=10_Vg2=-10_Vb=0_.txt',
-'TG5_SweepX+Vgg_Vg1=-10_Vg2=-10_Vb=0_.txt',
-'TG5_SweepX+Vgg_Vg1=10_Vg2=10_Vb=0_.txt',
-'TG5_SweepX+Vgg_Vg1=-10_Vg2=-10_Vb=0_.txt']
+sweeps_filename = ['TG5_SweepX+Vgg_Vg1=0_Vg2=0_Vb=0_',
+'TG5_SweepX+Vgg_Vg1=-10_Vg2=10_Vb=0_',
+'TG5_SweepX+Vgg_Vg1=10_Vg2=-10_Vb=0_',
+'TG5_SweepX+Vgg_Vg1=-10_Vg2=-10_Vb=0_',
+'TG5_SweepX+Vgg_Vg1=10_Vg2=10_Vb=0_',
+'TG5_SweepX+Vgg_Vg1=-10_Vg2=-10_Vb=0_']
 prefix = "C:\Data\Emile/20250606"
 
 for file in sweeps_filename:
