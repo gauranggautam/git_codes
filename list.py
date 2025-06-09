@@ -5,12 +5,11 @@ sweeps_filename = ['TG5_SweepX+Vgg_Vg1=0_Vg2=0_Vb=0_20250607-164406',
 'TG5_SweepX+Vgg_Vg1=-10_Vg2=10_Vb=0_20250607-213321',
 'TG5_SweepX+Vgg_Vg1=10_Vg2=-10_Vb=0_20250607-215416',
 'TG5_SweepX+Vgg_Vg1=-10_Vg2=-10_Vb=0_20250607-221330',
-'TG5_SweepX+Vgg_Vg1=10_Vg2=10_Vb=0_20250607-223417',
-'TG5_SweepX+Vgg_Vg1=-10_Vg2=-10_Vb=0_20250607-221330']
+'TG5_SweepX+Vgg_Vg1=10_Vg2=10_Vb=0_20250607-223417']
 prefix = "C:\Data\Emile/20250606"
 
 
-fig, axes = plt.subplots(6,3)
+fig, axes = plt.subplots(3,2)
 i=j=0
 for file in sweeps_filename:
     full_file = f'{prefix}\{file}*' 
@@ -24,6 +23,7 @@ for file in sweeps_filename:
 
     if j == 1:
         i+=1
+        j = 0
     else:
         j+=1
-fig.savefig(f'{prefix}\banane_.png')
+fig.savefig(f'{prefix}/banane_.png')
