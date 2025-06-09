@@ -4,15 +4,7 @@ from datetime import datetime
 
 
 
-#sweeps_filename = ['TG5_SweepVg2+Y_Vg1=-10_Vgg=0_Vb=0_',
-'TG5_SweepVg2+Y_Vg1=10_Vgg=0_Vb=0_',
-'TG5_SweepVg1+Y_Vg2=-10_Vgg=0_Vb=0_',
-'TG5_SweepVg1+Y_Vg2=10_Vgg=0_Vb=0_',
-'TG5_SweepVb+Y_Vg2=-2.5_Vg1=10_Vgg=0_',
-'TG5_SweepVb+Y_Vg2=-10_Vg1=10_Vgg=0_',
-'TG5_SweepVb+Y_Vg1=-2.5_Vg2=10_Vgg=0_',
-'TG5_SweepVb+Y_Vg1=-10_Vg2=10_Vgg=0_']
-#prefix = "C:\Data\Emile/20250606"
+
 
 #sweeps_filename = ['TG5_SweepX+Vgg_Vg1=0_Vg2=0_Vb=0_20250607-164406',
 #'TG5_SweepX+Vgg_Vg1=-10_Vg2=10_Vb=0_20250607-213321',
@@ -21,6 +13,15 @@ from datetime import datetime
 #'TG5_SweepX+Vgg_Vg1=10_Vg2=10_Vb=0_20250607-223417']
 #prefix = "C:\Data\Emile/20250606"
 
+sweeps_filename = ['TG5_SweepVg2+Y_Vg1=-10_Vgg=0_Vb=0_',
+'TG5_SweepVg2+Y_Vg1=10_Vgg=0_Vb=0_',
+'TG5_SweepVg1+Y_Vg2=-10_Vgg=0_Vb=0_',
+'TG5_SweepVg1+Y_Vg2=10_Vgg=0_Vb=0_',
+'TG5_SweepVb+Y_Vg2=-2.5_Vg1=10_Vgg=0_',
+'TG5_SweepVb+Y_Vg2=-10_Vg1=10_Vgg=0_',
+'TG5_SweepVb+Y_Vg1=-2.5_Vg2=10_Vgg=0_',
+'TG5_SweepVb+Y_Vg1=-10_Vg2=10_Vgg=0_']
+prefix = "C:\Data\Emile/20250608"
 
 fig, axes = plt.subplots(3,2)
 i=j=0
@@ -29,7 +30,8 @@ for file in sweeps_filename:
     print(full_file)
     m=readfile(full_file)
     print((i,j))
-    axes[i,j].pcolor(m[0], m[1],m[2])
+    z=util.xy2rt(m[2],m[3],dB=False)
+    axes[i,j].pcolor(m[0], m[1],z[0])
     #fig.colorbar(ax=axes[i,j])
     axes[i,j].set_title(file)
     
