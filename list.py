@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from datetime import datetime
 
 sweeps_filename = ['TG5_SweepX+Vgg_Vg1=0_Vg2=0_Vb=0_.txt',
 'TG5_SweepX+Vgg_Vg1=-10_Vg2=10_Vb=0_.txt',
@@ -14,5 +15,5 @@ for file in sweeps_filename:
     plt.pcolor(m[0], m[1],m[2])
     plt.colorbar()
     plt.title(full_file)
-    plt.savefig(full_file[-1]png)
+    plt.savefig(f'{full_file}_{datetime.now()}.png')
     
