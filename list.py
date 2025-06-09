@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-sweeps_filename = ['TG5_SweepX+Vgg_Vg1=0_Vg2=0_Vb=0_',
+sweeps_filename = ['TG5_SweepX+Vgg_Vg1=0_Vg2=0_Vb=0_20250607-164406.txt',
 'TG5_SweepX+Vgg_Vg1=-10_Vg2=10_Vb=0_',
 'TG5_SweepX+Vgg_Vg1=10_Vg2=-10_Vb=0_',
 'TG5_SweepX+Vgg_Vg1=-10_Vg2=-10_Vb=0_',
