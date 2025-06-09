@@ -10,7 +10,7 @@ sweeps_filename = ['TG5_SweepX+Vgg_Vg1=0_Vg2=0_Vb=0_20250607-164406',
 prefix = "C:\Data\Emile/20250606"
 
 
-fig, axes = plt.subplots(4,3)
+fig, axes = plt.subplots(6,3)
 i=j=0
 for file in sweeps_filename:
     full_file = f'{prefix}\{file}*' 
@@ -26,4 +26,4 @@ for file in sweeps_filename:
         i+=1
     else:
         j+=1
-fig.savefig(f'banane_.png')
+fig.savefig(f'{prefix}\banane_.png')
