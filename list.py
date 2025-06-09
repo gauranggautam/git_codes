@@ -18,7 +18,7 @@ for file in sweeps_filename:
     m=readfile(full_file)
     
     axes[i,j].pcolor(m[0], m[1],m[2])
-    fig.colorbar(, ax=axes[i,j])
+    fig.colorbar(ax=axes[i,j])
     axes[i,j].title(file)
     
 
