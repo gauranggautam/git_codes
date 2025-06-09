@@ -13,5 +13,6 @@ for file in sweeps_filename:
     m=readfile(full_file)
     plt.pcolor(m[0], m[1],m[2])
     plt.colorbar()
-    plt.title()
-    figure();pcolor(m[0], m[1],m[2]));colorbar();
+    plt.title(full_file)
+    plt.savefig(full_file[-1]png)
+    
