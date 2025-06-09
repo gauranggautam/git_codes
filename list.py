@@ -17,8 +17,12 @@ for file in sweeps_filename:
     print(full_file)
     m=readfile(full_file)
     
-    axes[]plt.pcolor(m[0], m[1],m[2])
-    axes[0,0] = plt.colorbar()
-    plt.title(file)
+    axes[i,j].pcolor(m[0], m[1],m[2])
+    axes[i,j].colorbar()
+    axes[i,j].title(file)
     plt.savefig(f'{full_file[:-1]}_.png')
+    if i == 1:
+        j+=1
+    else:
+        i+=1
 
