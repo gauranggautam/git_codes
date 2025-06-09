@@ -18,11 +18,11 @@ for file in sweeps_filename:
     m=readfile(full_file)
     axes[i,j].pcolor(m[0], m[1],m[2])
     #fig.colorbar(ax=axes[i,j])
-    axes[i,j].
+    axes[i,j].set_title(file)
     
 
-    if i == 1:
-        j+=1
-    else:
+    if j == 1:
         i+=1
+    else:
+        j+=1
 fig.savefig(f'banane_.png')
