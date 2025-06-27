@@ -33,7 +33,7 @@ def plot_spectrum(input, compare=False, fig=11,id='Plot'):
     else:
         ax.set_title(os.path.basename(filename))
 #Ongoing+plot PLmap        
-def plot_plmap(input, mode='custom', flog=False, xr=[None,None], yr=[None,None],xi=0, yi=2, zi=6, id='Plot'):
+def plot_plmap(input, mode='custom', flog=False, xr=[None,None], yr=[None,Nonexi=0, yi=2, zi=6, id='Plot'):
 
     filename=input
     v=readfile(filename,encoding='latin1',multi_sweep='force')
@@ -55,6 +55,12 @@ def plot_plmap(input, mode='custom', flog=False, xr=[None,None], yr=[None,None],
         plmap=pcolor(v[x_index],v[y_index],v[z_index],cmap=cmap)
     
     cbar = fig.colorbar(plmap, ax=ax)
+    
+    if flog:
+        cbar.set_label('Log10 Counts')
+    else:
+        cbar.set_label('Raw Counts')
+    
     cbar.set_label('Log10 Counts')
     ax.invert_xaxis()
     ax.invert_yaxis()
