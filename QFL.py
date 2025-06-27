@@ -33,7 +33,7 @@ def plot_spectrum(input, compare=False, fig=11,id='Plot'):
     else:
         ax.set_title(os.path.basename(filename))
 #Ongoing+plot PLmap        
-def plot_plmap(input, mode='custom', flog=False, xi=0, yi=2, zi=6, id='Plot'):
+def plot_plmap(input, mode='custom', flog=False, xr=(None,None), yr=(None,None)xi=0, yi=2, zi=6, id='Plot'):
 
     filename=input
     v=readfile(filename,encoding='latin1',multi_sweep='force')
@@ -59,6 +59,8 @@ def plot_plmap(input, mode='custom', flog=False, xi=0, yi=2, zi=6, id='Plot'):
     ax.invert_xaxis()
     ax.invert_yaxis()
     ax.set_xlabel('X (in um)')
+    ax.set_xlim(xr)
+    ax.set_ylim(yr)
     ax.set_ylabel('Y (in um)')
     ax.set_title(f'{id}_{os.path.basename(filename)}')
 
