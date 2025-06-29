@@ -1,18 +1,6 @@
 import os
 import matplotlib.pyplot as plt
 
-sz = 25  # Font size
-plt.rcParams['font.family'] = 'Times New Roman'
-plt.rcParams['font.size'] = sz
-plt.rcParams['font.weight'] = 'bold'
-plt.rcParams['axes.labelweight'] = 'bold'
-plt.rcParams['axes.titlesize'] = sz
-plt.rcParams['axes.titleweight'] = 'bold'
-plt.rcParams['axes.labelsize'] = sz
-plt.rcParams['legend.fontsize'] = sz
-plt.rcParams['xtick.labelsize'] = sz
-plt.rcParams['ytick.labelsize'] = sz
-
 def plot_spectrum(input, compare=False, fig=11,id='Plot'):
     filename = input
     v=readfile(os.path.join(input_dir, filename),encoding='latin1',multi_sweep='force')
