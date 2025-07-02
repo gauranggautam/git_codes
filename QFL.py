@@ -15,7 +15,7 @@ plt.rcParams['ytick.labelsize'] = sz
 
 def plot_spectrum(input, compare=False, fig=11,id='Plot'):
     filename = input
-    v=readfile(os.path.join(input_dir, filename),encoding='latin1',multi_sweep='force')
+    v=readfile(filename,encoding='latin1',multi_sweep='force')
     #Compare mode
     if compare:
         figure(fig)
