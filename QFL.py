@@ -13,12 +13,7 @@ def plot_spectrum(input, compare=False, fig=11, id='Plot'):
     - id (str): Label identifier for the plot legend.
     """
     filename = input
-<<<<<<< HEAD
-    v=readfile(filename,encoding='latin1',multi_sweep='force')
-    #Compare mode
-=======
     v = readfile(os.path.join(input_dir, filename), encoding='latin1', multi_sweep='force')
->>>>>>> e69310ae1893e3ddb18d5c39bd068b9c18d59e2c
     if compare:
         figure(fig)
         ax = plt.gca()
@@ -34,16 +29,11 @@ def plot_spectrum(input, compare=False, fig=11, id='Plot'):
         ax.legend(loc='upper right')
     else:
         ax.set_title(os.path.basename(filename))
-<<<<<<< HEAD
-#Ongoing+plot PLmap        
-def plot_plmap(input, mode='custom', flog=False, xr=[None,None], yr=[None,None], xi=0, yi=2, zi=6, id='Plot'):
-=======
 
 
 def plot_plmap(input, mode='custom', flog=False, xi=0, yi=2, zi=6, id='Plot'):
     """
     Plot a PL map using pcolor.
->>>>>>> e69310ae1893e3ddb18d5c39bd068b9c18d59e2c
 
     Parameters:
     - input (str): Path to the input data file.
@@ -72,18 +62,7 @@ def plot_plmap(input, mode='custom', flog=False, xi=0, yi=2, zi=6, id='Plot'):
         plmap = pcolor(v[x_index], v[y_index], v[z_index], cmap=cmap)
 
     cbar = fig.colorbar(plmap, ax=ax)
-<<<<<<< HEAD
-    
-    if flog:
-        cbar.set_label('Log10 Counts')
-    else:
-        cbar.set_label('Raw Counts')
-    
-    ax.set_xlim(xr)
-    ax.set_ylim(yr)
-=======
     cbar.set_label('Log10 Counts' if flog else 'Counts')
->>>>>>> e69310ae1893e3ddb18d5c39bd068b9c18d59e2c
     ax.invert_xaxis()
     ax.invert_yaxis()
     ax.set_xlabel('X (in um)')
