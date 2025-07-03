@@ -1,6 +1,11 @@
 import os
 import matplotlib.pyplot as plt
 import numpy as np  # Needed for np.radians and np.min
+from matplotlib import cm
+
+
+TAB20_COLORS = plt.cm.get_cmap('tab20').colors
+
 
 def plot_spectrum(input, compare=False, fig=11, id='Plot'):
     """
@@ -13,12 +18,17 @@ def plot_spectrum(input, compare=False, fig=11, id='Plot'):
     - id (str): Label identifier for the plot legend.
     """
     filename = input
-    v = readfile(os.path.join(input_dir, filename), encoding='latin1', multi_sweep='force')
+    v = readfile(filename, encoding='latin1', multi_sweep='force')
     if compare:
         figure(fig)
         ax = plt.gca()
+        if not hasattr(ax, '_color_cycle_set'):
+            ax.set_prop_cycle(color=TAB20_COLORS)
+            ax._color_cycle_set = True
     else:
-        fig, ax = plt.subplots()
+        _, ax = plt.subplots()
+        ax.set_prop_cycle(color=TAB20_COLORS)
+
     spectr = plot(v[1], v[2], label=f'{id}_{os.path.basename(filename)}')
     ax.set_xlim(min(v[1]), max(v[1]))
     ax.set_xlabel('Wavelength (nm)')
