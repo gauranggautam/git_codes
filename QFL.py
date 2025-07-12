@@ -164,3 +164,70 @@ def plot_polarization(input, polar=True, mode='custom', flog=False, xi=0, yi=1):
         ax.set_ylabel('Counts (Arb.)')
         ax.set_title('Polarization dependence')
         plt.legend()
+
+
+#Plot EM 2 probes
+
+def plot_elmap(input, smu=False, sr1=False, sr4=False, smx=6, sr1x=4,sr1y=5,sr4x=2, sr4y=3,flog=False, id='Plot'):
+    """
+    Plot EL measurements from file
+
+    Parameters:
+    - input (str): Path to the input data file.
+    - mode (str): AC or DC or 'custom'. Chooses predefined column indices.
+    
+    -smux= smu current column
+    -
+    
+
+    - id (str): Identifier used in the plot title.
+    """
+    filename = input
+    v = readfile(filename, encoding='latin1', multi_sweep='force')
+    
+    x_index, y_index = 0, 1
+    if smu:
+        fig, ax = plt.subplots()
+        cmap = plt.get_cmap('viridis')
+        smi=v[smx]
+        smup= pcolor(v[x_index]/1000, v[y_index]/1000, smi, cmap=cmap)
+        cbar = fig.colorbar(smup, ax=ax)
+        cbar.set_label('Log10 Counts')
+        ax.invert_xaxis()
+        ax.invert_yaxis()
+        ax.set_xlabel('X (in um)')
+        ax.set_ylabel('Y (in um)')
+        ax.set_title(f'{id}_smu')
+        #ax.set_title(f'{id}_smu_{os.path.basename(filename)}')
+
+    if sr1:
+        fig, ax = plt.subplots()
+        cmap = plt.get_cmap('viridis')
+        smi=v[smx]
+        zr=util.xy2rt(v[sr1x],v[sr1y],dB=False)
+        sr1p= pcolor(v[x_index]/1000, v[y_index]/1000, zr[0], cmap=cmap)
+        cbar = fig.colorbar(sr1p, ax=ax)
+        #cbar.set_label('Log10 Counts')
+        ax.invert_xaxis()
+        ax.invert_yaxis()
+        ax.set_xlabel('X (in um)')
+        ax.set_ylabel('Y (in um)')
+        ax.set_title(f'{id}_sr1')
+        #ax.set_title(f'{id}_sr1_{os.path.basename(filename)}')
+
+    if sr4:
+        fig, ax = plt.subplots()
+        cmap = plt.get_cmap('viridis')
+        smi=v[smx]
+        zr=util.xy2rt(v[sr4x],v[sr4y],dB=False)
+        sr4p= pcolor(v[x_index]/1000, v[y_index]/1000, zr[0]*1E-6, cmap=cmap)
+        cbar = fig.colorbar(sr4p, ax=ax)
+        #cbar.set_label('Counts')
+        ax.invert_xaxis()
+        ax.invert_yaxis()
+        ax.set_xlabel('X (in um)')
+        ax.set_ylabel('Y (in um)')
+        ax.set_title(f'{id}_sr4')
+        #ax.set_title(f'{id}_sr4_{os.path.basename(filename)}')
+    
+    
