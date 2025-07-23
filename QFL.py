@@ -55,7 +55,7 @@ def plot_plmap(input, mode='custom', flog=False, xi=0, yi=2, zi=6, id='Plot'):
     filename = input
     v = readfile(filename, encoding='latin1', multi_sweep='force')
     fig, ax = plt.subplots()
-    cmap = plt.get_cmap('viridis')
+    cmap = plt.get_cmap('plasma')
 
     if mode == 'apd':
         x_index, y_index, z_index = 0, 2, 6
