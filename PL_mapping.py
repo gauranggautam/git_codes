@@ -3,7 +3,7 @@ import time, os, AMC
 from snAPI.Main import *
 
 # === Config ===
-X_START, X_END, Y_START, Y_END, STEP = -20, 20, -20, 20, 5
+X_START, X_END, Y_START, Y_END, STEP = -20, 20, -20, 20, 0.2
 timestamp = time.strftime('%Y_%m_%d_%H_%M_%S')
 out_dir = './PlotBasic/Output/PLmaps'
 os.makedirs(out_dir, exist_ok=True)
@@ -88,9 +88,9 @@ point_counter = 0
 start_time = time.time()
 
 for i, x in enumerate(x_pos):
+    amc.move.setControlTargetPosition(0, int(x * 1000))
     for j, y in enumerate(y_pos):
         try:
-            amc.move.setControlTargetPosition(0, int(x * 1000))
             amc.move.setControlTargetPosition(2, int(y * 1000))
             wait_until_stable()
 
