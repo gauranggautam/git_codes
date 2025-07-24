@@ -29,9 +29,8 @@ def make_grid(x, y, z):
 # === AMC Init ===
 amc = AMC.Device('amc100num-a01-0248.local')
 amc.connect()
-for axis in [0, 2]:
-    amc.control.setControlOutput(axis, True)
-    amc.control.setControlMove(axis, True)
+for a in [0, 2]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
+amc.control.setControlOutput(1, False); amc.control.setControlMove(1, False)
 
 def wait_until_stable(timeout=10):
     import time
@@ -40,9 +39,10 @@ def wait_until_stable(timeout=10):
         if all(amc.status.getStatusMoving(a) == 0 for a in [0, 2]) and \
            all(amc.status.getStatusTargetRange(a) for a in [0, 2]):
             break
+        for a in [0, 2]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
         if time.time() - start > timeout:
             break
-        time.sleep(0.05)
+        time.sleep(0.01)
 
 # === Main App ===
 class PLMapGUI:
@@ -67,6 +67,8 @@ class PLMapGUI:
         ax.set_title("Click on a point to Go To")
         ax.set_xlabel("X (µm)")
         ax.set_ylabel("Y (µm)")
+        ax.invert_xaxis()
+        ax.invert_yaxis()
         fig.colorbar(self.im, ax=ax, label="Total Counts")
 
         self.canvas = FigureCanvasTkAgg(fig, master=self.root)

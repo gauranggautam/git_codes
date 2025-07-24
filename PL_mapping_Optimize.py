@@ -2,8 +2,20 @@ import numpy as np, matplotlib.pyplot as plt, matplotlib.ticker as mticker
 import time, os, AMC
 from snAPI.Main import *
 
-# === Config ===
-X_START, X_END, Y_START, Y_END, STEP = -20, 20, -20, 20, 0.2
+
+
+# === AMC Init ===
+amc = AMC.Device('amc100num-a01-0248.local')
+amc.connect()
+for a in [0, 2]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
+amc.control.setControlOutput(1, False); amc.control.setControlMove(1, False)
+
+x_now = amc.move.getPosition(0) / 1000
+y_now = amc.move.getPosition(2) / 1000
+
+
+
+X_START, X_END, Y_START, Y_END, STEP = x_now-1, x_now+1, y_now-1, y_now+1, 0.1
 timestamp = time.strftime('%Y_%m_%d_%H_%M_%S')
 out_dir = './PlotBasic/Output/PLmaps'
 os.makedirs(out_dir, exist_ok=True)
@@ -24,12 +36,6 @@ if Detectors == 1:
 else:
     d1, d2 = 3, 4
     sn.loadIniConfig(r'C:\Users\iq-qfl\Documents\Gaurang\Codes\user_configs_snAPI\MPDs_MH.ini')
-
-# === AMC Init ===
-amc = AMC.Device('amc100num-a01-0248.local')
-amc.connect()
-for a in [0, 2]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
-amc.control.setControlOutput(1, False); amc.control.setControlMove(1, False)
 
 # === Grid Setup ===
 x_pos = np.arange(X_START, X_END + STEP, STEP)
@@ -141,9 +147,9 @@ plt.ioff()
 plt.savefig(plot_file)
 plt.show()
 
-#amc.move.setControlTargetPosition(0, int(best_x * 1000))
-#amc.move.setControlTargetPosition(2, int(best_y * 1000))
-#print(f'\nMoved to max: ({best_x:.2f}, {best_y:.2f})')
+amc.move.setControlTargetPosition(0, int(best_x * 1000))
+amc.move.setControlTargetPosition(2, int(best_y * 1000))
+print(f'\nMoved to max: ({best_x:.2f}, {best_y:.2f})')
 
 sn.closeDevice(0)
 for a in [0, 1, 2]:
