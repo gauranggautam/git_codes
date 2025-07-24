@@ -30,3 +30,5 @@ for file in sweeps_filename:
     plt.title(file)
     plt.savefig(f'{full_file[:-1]}_.png')
 
+#os.system('cls' if os.name == 'nt' else 'clear')
+#rint(f'using file name: {data_file})

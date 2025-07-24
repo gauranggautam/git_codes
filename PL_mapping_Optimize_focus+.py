@@ -3,11 +3,11 @@ import time, os, AMC
 from snAPI.Main import *
 
 # === CONFIG ===
-FOCUS_ONLY_MODE = False  # Set to True to skip scan and only do focus sweep
+FOCUS_ONLY_MODE = True  # Set to True to skip scan and only do focus sweep
 SC_SIZE = 1              # Scan area half-size in µm
 STEP = 0.1               # Scan step in µm
 FOCUS_STEP = 0.1         # Focus scan step in µm
-FOCUS_RANGE = 2          # ± range from current focus
+FOCUS_RANGE = 20          # ± range from current focus
 
 timestamp = time.strftime('%Y_%m_%d_%H_%M_%S')
 out_dir = './PlotBasic/Output/PLmaps'
@@ -43,7 +43,7 @@ else:
     sn.loadIniConfig(r'C:\Users\iq-qfl\Documents\Gaurang\Codes\user_configs_snAPI\MPDs_MH.ini')
 
 # === Helper: Wait Until Stable ===
-def wait_until_stable(timeout=100):
+def wait_until_stable(timeout=10):
     start = time.time()
     while True:
         if all(amc.status.getStatusMoving(a) == 0 for a in [0, 2]) and \
@@ -52,8 +52,18 @@ def wait_until_stable(timeout=100):
         for a in [0, 2]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
         if time.time() - start > timeout:
             print("Timeout waiting for stage"); break
-        time.sleep(0.05)
-
+        time.sleep(0.01)
+def wait_until_stable_xyz(a=None):
+    timeout=10
+    start = time.time()
+    while True:
+        if amc.status.getStatusMoving(a) == 0 and \
+           amc.status.getStatusTargetRange(a):
+            break
+        for a in [0]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
+        if time.time() - start > timeout:
+            print("Timeout waiting for stage"); break
+        time.sleep(0.01)
 # === Full Mapping Mode ===
 if not FOCUS_ONLY_MODE:
     x_pos = np.arange(X_START, X_END + STEP, STEP)
@@ -61,7 +71,7 @@ if not FOCUS_ONLY_MODE:
     Z = np.zeros((len(y_pos), len(x_pos)), dtype=float)
     extent = [X_START, X_END, Y_START, Y_END]
     global_max = 1
-    max_int, best_x, best_y = 0, X_START, Y_START
+    max_int, max_cf, best_x, best_y = 0, 0, X_START, Y_START
 
     # === Plot Init ===
     plt.ion()
@@ -83,10 +93,11 @@ if not FOCUS_ONLY_MODE:
     # === Start Scan ===
     for i, x in enumerate(x_pos):
         amc.move.setControlTargetPosition(0, int(x * 1000))
+        wait_until_stable_xyz(a=0)
         for j, y in enumerate(y_pos):
             try:
                 amc.move.setControlTargetPosition(2, int(y * 1000))
-                wait_until_stable()
+                wait_until_stable_xyz(a=2)
 
                 x_act = amc.move.getPosition(0) / 1000
                 y_act = amc.move.getPosition(2) / 1000
@@ -117,6 +128,7 @@ if not FOCUS_ONLY_MODE:
 
             except Exception as e:
                 print(f'\nError at ({x:.2f}, {y:.2f}): {e}')
+        
 
     amc.move.setControlTargetPosition(0, int(best_x * 1000))
     amc.move.setControlTargetPosition(2, int(best_y * 1000))
@@ -130,21 +142,32 @@ else:
     best_x, best_y = x_now, y_now
     amc.move.setControlTargetPosition(0, int(best_x * 1000))
     amc.move.setControlTargetPosition(2, int(best_y * 1000))
-    wait_until_stable()
+    wait_until_stable([0,1,2])
     print(f'\nFocus-only mode at current pos: ({best_x:.2f}, {best_y:.2f})')
 
 # === FOCUS SWEEP ===
+for a in [1]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
+for a in [0, 2]: amc.control.setControlOutput(a, False); amc.control.setControlMove(a, False)
 focus_range = np.arange(f_now - FOCUS_RANGE, f_now + FOCUS_RANGE + FOCUS_STEP, FOCUS_STEP)
 counts = []
+max_cf, best_f= 0, f_now
 
 print("\nSweeping focus...")
 for f in focus_range:
     amc.move.setControlTargetPosition(1, int(f * 1000))
-    time.sleep(0.1)
+    wait_until_stable(a=1)
     cnt = sn.getCountRates()
     total = cnt[d1] + cnt[d2]
     counts.append(total)
-    print(f'Focus {f:.2f} µm -> {total} cps')
+    f_act= amc.move.getPosition(1) / 1000
+    #print(f'Focus {f:.2f} µm -> {total} cps')
+    
+    if total > max_cf:
+        max_cf, best_f= total, f_act
+        print(f'Best Focus: {best_f:.2f}')    
+
+amc.move.setControlTargetPosition(1, int(best_f * 1000))
+print(f'Moved to Focus: {best_f:.2f}')    
 
 focus_file = os.path.join(out_dir, f'focus_sweep_{timestamp}.txt')
 with open(focus_file, 'w') as f:

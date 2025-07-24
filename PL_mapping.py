@@ -3,7 +3,7 @@ import time, os, AMC
 from snAPI.Main import *
 
 # === Config ===
-X_START, X_END, Y_START, Y_END, STEP = -20, 20, -20, 20, 0.2
+X_START, X_END, Y_START, Y_END, STEP = -265, -235, 85, 115, 0.2
 timestamp = time.strftime('%Y_%m_%d_%H_%M_%S')
 out_dir = './PlotBasic/Output/PLmaps'
 os.makedirs(out_dir, exist_ok=True)
@@ -28,8 +28,8 @@ else:
 # === AMC Init ===
 amc = AMC.Device('amc100num-a01-0248.local')
 amc.connect()
-for a in [0, 2]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
-amc.control.setControlOutput(1, False); amc.control.setControlMove(1, False)
+for a in [0, 1, 2]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
+#amc.control.setControlOutput(1, False); amc.control.setControlMove(1, False)
 
 # === Grid Setup ===
 x_pos = np.arange(X_START, X_END + STEP, STEP)
@@ -62,12 +62,16 @@ ax2.set_title('PL map - Log counts')
 # === Output Files ===
 plot_file = os.path.join(out_dir, f'plmap_plot_{timestamp}.png')
 data_file = os.path.join(out_dir, f'plmap_data_{timestamp}.txt')
+
+#os.system('cls' if os.name == 'nt' else 'clear')
+print(f'using file name: {data_file}')
+      
 with open(data_file, 'w') as f:
     f.write(f'# PL Mapping - {timestamp}\n')
     f.write('# x_req\ty_req\tx_act\ty_act\tcount1\tcount2\ttotal\n')
 
 # === Wait Helper ===
-def wait_until_stable(timeout=100):
+def wait_until_stable(timeout=10):
     start = time.time()
     while True:
         if all(amc.status.getStatusMoving(a) == 0 for a in [0, 2]) and \
@@ -76,13 +80,32 @@ def wait_until_stable(timeout=100):
         for a in [0, 2]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
         if time.time() - start > timeout:
             print("Timeout waiting for stage"); break
-        time.sleep(0.05)
+        time.sleep(0.01)
+def wait_until_stable_x(timeout=10):
+    start = time.time()
+    while True:
+        if all(amc.status.getStatusMoving(a) == 0 for a in [0]) and \
+           all(amc.status.getStatusTargetRange(a) for a in [0]):
+            break
+        for a in [0]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
+        if time.time() - start > timeout:
+            print("Timeout waiting for stage"); break
+        time.sleep(0.01)
+def wait_until_stable_y(timeout=10):
+    start = time.time()
+    while True:
+        if all(amc.status.getStatusMoving(a) == 0 for a in [2]) and \
+           all(amc.status.getStatusTargetRange(a) for a in [2]):
+            break
+        for a in [2]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
+        if time.time() - start > timeout:
+            print("Timeout waiting for stage"); break
+        time.sleep(0.01)
 
 # === Move to Start ===
 amc.move.setControlTargetPosition(0, int(X_START * 1000))
 amc.move.setControlTargetPosition(2, int(Y_START * 1000))
-time.sleep(2)
-
+wait_until_stable()
 # === Scan ===
 max_int, best_x, best_y = 0, X_START, Y_START
 global_max = 1
@@ -90,13 +113,14 @@ total_points = len(x_pos) * len(y_pos)
 point_counter = 0
 start_time = time.time()
 
+
 for i, x in enumerate(x_pos):
     amc.move.setControlTargetPosition(0, int(x * 1000))
+    wait_until_stable_y()
     for j, y in enumerate(y_pos):
         try:
             amc.move.setControlTargetPosition(2, int(y * 1000))
-            wait_until_stable()
-
+            wait_until_stable_x()
             x_act = amc.move.getPosition(0) / 1000
             y_act = amc.move.getPosition(2) / 1000
             cnt = sn.getCountRates()
@@ -123,7 +147,7 @@ for i, x in enumerate(x_pos):
             cb2.update_normal(img2)
 
             ax1.set_title(f'PL Map (Linear) – Max: {max_int:.0f} at ({best_x:.2f}, {best_y:.2f})')
-            plt.pause(0.01)
+            plt.pause(0.0001)
 
             # === ETA ===
             point_counter += 1
