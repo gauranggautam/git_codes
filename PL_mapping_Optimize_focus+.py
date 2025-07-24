@@ -19,11 +19,11 @@ f_now = amc.move.getPosition(1) / 1000
 
 # === Scan Configuration ===
 scsize = 1
-X_START, X_END = x_now - scsize, x_now + scsize
+X_START, X_END = x_now - scsize, x_now + scsize 
 Y_START, Y_END = y_now - scsize, y_now + scsize
 STEP = 0.1
-F_SWEEP_RANGE = 1.0  # sweep focus ± this value
-F_STEP = 0.05
+F_SWEEP_RANGE = 5.0  # sweep focus ± this value
+F_STEP = 0.1
 
 timestamp = time.strftime('%Y_%m_%d_%H_%M_%S')
 out_dir = './PlotBasic/Output/PLmaps'
