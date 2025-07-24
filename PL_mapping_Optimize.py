@@ -3,7 +3,7 @@ import time, os, AMC
 from snAPI.Main import *
 
 
-scsize=1
+scsize=2
 # === AMC Init ===
 amc = AMC.Device('amc100num-a01-0248.local')
 amc.connect()
