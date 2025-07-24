@@ -3,7 +3,7 @@ import time, os, AMC
 from snAPI.Main import *
 
 
-
+scsize=1
 # === AMC Init ===
 amc = AMC.Device('amc100num-a01-0248.local')
 amc.connect()
@@ -15,7 +15,7 @@ y_now = amc.move.getPosition(2) / 1000
 
 
 
-X_START, X_END, Y_START, Y_END, STEP = x_now-1, x_now+1, y_now-1, y_now+1, 0.1
+X_START, X_END, Y_START, Y_END, STEP = x_now-scsize, x_now+scsize, y_now-scsize, y_now+scsize, 0.1
 timestamp = time.strftime('%Y_%m_%d_%H_%M_%S')
 out_dir = './PlotBasic/Output/PLmaps'
 os.makedirs(out_dir, exist_ok=True)
