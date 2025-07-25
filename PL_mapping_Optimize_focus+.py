@@ -43,24 +43,14 @@ else:
     sn.loadIniConfig(r'C:\Users\iq-qfl\Documents\Gaurang\Codes\user_configs_snAPI\MPDs_MH.ini')
 
 # === Helper: Wait Until Stable ===
-def wait_until_stable(timeout=10):
-    start = time.time()
-    while True:
-        if all(amc.status.getStatusMoving(a) == 0 for a in [0, 2]) and \
-           all(amc.status.getStatusTargetRange(a) for a in [0, 2]):
-            break
-        for a in [0, 2]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
-        if time.time() - start > timeout:
-            print("Timeout waiting for stage"); break
-        time.sleep(0.01)
-def wait_until_stable_xyz(a=None):
+def wait_until_stable(axx=None):
     timeout=10
     start = time.time()
     while True:
-        if amc.status.getStatusMoving(a) == 0 and \
-           amc.status.getStatusTargetRange(a):
+        if amc.status.getStatusMoving(axx) == 0 and \
+           amc.status.getStatusTargetRange(axx):
             break
-        for a in [0]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
+        amc.control.setControlOutput(axx, True); amc.control.setControlMove(axx, True)
         if time.time() - start > timeout:
             print("Timeout waiting for stage"); break
         time.sleep(0.01)
@@ -93,11 +83,11 @@ if not FOCUS_ONLY_MODE:
     # === Start Scan ===
     for i, x in enumerate(x_pos):
         amc.move.setControlTargetPosition(0, int(x * 1000))
-        wait_until_stable_xyz(a=0)
+        wait_until_stable(axx=0)
         for j, y in enumerate(y_pos):
             try:
                 amc.move.setControlTargetPosition(2, int(y * 1000))
-                wait_until_stable_xyz(a=2)
+                wait_until_stable(axx=2)
 
                 x_act = amc.move.getPosition(0) / 1000
                 y_act = amc.move.getPosition(2) / 1000
@@ -147,7 +137,7 @@ else:
 
 # === FOCUS SWEEP ===
 for a in [1]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
-for a in [0, 2]: amc.control.setControlOutput(a, False); amc.control.setControlMove(a, False)
+for a in [0, 2]: amc.control.setControlMove(a, False)
 focus_range = np.arange(f_now - FOCUS_RANGE, f_now + FOCUS_RANGE + FOCUS_STEP, FOCUS_STEP)
 counts = []
 max_cf, best_f= 0, f_now
@@ -155,7 +145,7 @@ max_cf, best_f= 0, f_now
 print("\nSweeping focus...")
 for f in focus_range:
     amc.move.setControlTargetPosition(1, int(f * 1000))
-    wait_until_stable(a=1)
+    wait_until_stable(axx=1)
     cnt = sn.getCountRates()
     total = cnt[d1] + cnt[d2]
     counts.append(total)

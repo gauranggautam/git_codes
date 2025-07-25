@@ -73,32 +73,17 @@ with open(data_file, 'w') as f:
     f.write('# x_req\ty_req\tx_act\ty_act\tcount1\tcount2\ttotal\n')
 
 # === Wait Helper ===
-def wait_until_stable():
+def wait_until_stable(axx=None):
     timeout=10
     start = time.time()
     while True:
-        if all(amc.status.getStatusMoving(a) == 0 for a in [0, 2]) and \
-           all(amc.status.getStatusTargetRange(a) for a in [0, 2]):
+        if amc.status.getStatusMoving(axx) == 0 and \
+           amc.status.getStatusTargetRange(axx):
             break
-        for a in [0, 2]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
+        amc.control.setControlOutput(axx, True); amc.control.setControlMove(axx, True)
         if time.time() - start > timeout:
             print("Timeout waiting for stage"); break
         time.sleep(0.01)
-def wait_until_stable_xyz(a=None):
-    timeout=10
-    start = time.time()
-    while True:
-        if amc.status.getStatusMoving(a) == 0 and \
-           amc.status.getStatusTargetRange(a):
-            break
-        for a in [0]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
-        if time.time() - start > timeout:
-            print("Timeout waiting for stage"); break
-        time.sleep(0.01)
-# === Move to Start ===
-amc.move.setControlTargetPosition(0, int(X_START * 1000))
-amc.move.setControlTargetPosition(2, int(Y_START * 1000))
-time.sleep(2)
 
 # === Scan ===
 max_int, best_x, best_y = 0, X_START, Y_START
@@ -109,11 +94,11 @@ start_time = time.time()
 
 for i, x in enumerate(x_pos):
     amc.move.setControlTargetPosition(0, int(x * 1000))
-    wait_until_stable_xyz(a=0)
+    wait_until_stable(axx=0)
     for j, y in enumerate(y_pos):
         try:
             amc.move.setControlTargetPosition(2, int(y * 1000))
-            wait_until_stable_xyz(a=2)
+            wait_until_stable(axx=2)
 
             x_act = amc.move.getPosition(0) / 1000
             y_act = amc.move.getPosition(2) / 1000
