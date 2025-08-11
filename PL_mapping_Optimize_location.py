@@ -1,13 +1,16 @@
 import numpy as np, matplotlib.pyplot as plt, matplotlib.ticker as mticker
 import time, os, AMC
 from snAPI.Main import *
+import pyvisa
+import time
+rm = pyvisa.ResourceManager()
+esp = rm.open_resource("GPIB1::7::INSTR")
 
-
-scsize=2
+scsize=3
 # === AMC Init ===
 amc = AMC.Device('amc100num-a01-0248.local')
 amc.connect()
-for a in [0, 2]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
+for a in [0, 1, 2]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
 amc.control.setControlOutput(1, False); amc.control.setControlMove(1, False)
 
 x_now = amc.move.getPosition(0) / 1000
@@ -15,7 +18,7 @@ y_now = amc.move.getPosition(2) / 1000
 
 
 
-X_START, X_END, Y_START, Y_END, STEP = x_now-scsize, x_now+scsize, y_now-scsize, y_now+scsize, 0.1
+X_START, X_END, Y_START, Y_END, STEP = x_now-scsize, x_now+scsize, y_now-scsize, y_now+scsize, 0.2
 timestamp = time.strftime('%Y_%m_%d_%H_%M_%S')
 out_dir = './PlotBasic/Output/PLmaps'
 os.makedirs(out_dir, exist_ok=True)
@@ -140,6 +143,7 @@ for i, x in enumerate(x_pos):
             print(f'\nError at ({x:.2f}, {y:.2f}): {e}')
 
 # === Finish ===
+sn.closeDevice(0)
 plt.ioff()
 plt.savefig(plot_file)
 plt.show()

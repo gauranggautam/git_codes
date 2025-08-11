@@ -17,7 +17,6 @@ sn.getDeviceIDs()
 if sn.getDevice(0):
     sn.setLogLevel(LogLevel.Device, False)
     sn.setLogLevel(LogLevel.Api, False)
-    print(f'MH Device : ({sn.deviceConfig["ID"]}) detected, initializing...')
     sn.initDevice(MeasMode.T2)
     if Detectors==1:
         a,b=1,2
@@ -33,7 +32,7 @@ if sn.getDevice(0):
     sn.device.setOflCompression(0)
 
     # Measure time in seconds
-    mt = 600 #in seconds
+    mt = 180 #in seconds
     succ=False
     sv=True
 
@@ -45,7 +44,6 @@ if sn.getDevice(0):
     g2_filename= os.path.join(output_dir, ptuo)
     sn.setPTUFilePath(g2_filename)
     details_filename = os.path.join(output_dir, f"g2details_{mt:.0f}s_{dtnow}.txt")
-    print(f'Filename identifier : {ptuo}, proceeding...')
     #Parameters for g2
     d= binsize = 200           #in ps
     c= windowsize = 100000     #in ps
@@ -53,10 +51,14 @@ if sn.getDevice(0):
     sn.correlation.setG2Parameters(a, b, c, d)
         
     #Start measurement
-    print(f'Starting a measurement for {mt} s, proceeding...')
+    
     sn.correlation.measure(int(mt*1000), savePTU=True)
     start_timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print(f'MH Device : ({sn.deviceConfig["ID"]}) initialized.')
+    print(f'Starting a measurement for {mt} s...')
+    print(f'using file name: {g2_filename}')
     #Tracking for g2details
     elapsed_time_list = []
     ch1_counts = []

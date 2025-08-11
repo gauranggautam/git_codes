@@ -3,7 +3,7 @@ import time, os, AMC
 from snAPI.Main import *
 
 # === Config ===
-X_START, X_END, Y_START, Y_END, STEP = -310, -290, -260, -240, 0.2
+X_START, X_END, Y_START, Y_END, STEP = -20, 20, -20, 20, 1
 timestamp = time.strftime('%Y_%m_%d_%H_%M_%S')
 out_dir = './PlotBasic/Output/PLmaps'
 os.makedirs(out_dir, exist_ok=True)
