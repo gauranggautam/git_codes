@@ -32,7 +32,7 @@ if sn.getDevice(0):
     sn.device.setOflCompression(0)
 
     # Measure time in seconds
-    mt = 180 #in seconds
+    mt = 600 #in seconds
     succ=False
     sv=True
 
@@ -45,7 +45,7 @@ if sn.getDevice(0):
     sn.setPTUFilePath(g2_filename)
     details_filename = os.path.join(output_dir, f"g2details_{mt:.0f}s_{dtnow}.txt")
     #Parameters for g2
-    d= binsize = 200           #in ps
+    d= binsize = 100           #in ps
     c= windowsize = 100000     #in ps
  
     sn.correlation.setG2Parameters(a, b, c, d)
@@ -116,7 +116,7 @@ if sn.getDevice(0):
             axes[0].plot(lagtimes_ns, g2, label=f'{os.path.basename(g2_filename)}', linewidth=0.5)
             axes[0].set_xlabel('Time delay(ns)')
             axes[0].set_ylabel('g2(t)')
-            axes[0].set_title(f'g2(t) Correlation (BinWidth = {d} ps & WindowSize = {int(c/1000):.0f} ns) g2(0)={g2_zero: .1f}')
+            axes[0].set_title(f'g2(t) Correlation (BinWidth = {d} ps & WindowSize = {int(c/1000):.0f} ns) g2(0)={g2_zero: .2f}')
             axes[0].legend(loc='upper right')
             axes[0].set_ylim(0, None)
             
@@ -157,5 +157,5 @@ if sn.getDevice(0):
         plt.ioff()
         plt.show()
 else:
-    print(f'MH Device not detected, Try closing all devices!')
+    print(f'MH Device not detected in Python, Close it from LabScan!')
     sn.closeDevice(0) 

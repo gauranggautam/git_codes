@@ -54,7 +54,7 @@ def plot_spectrum(input, compare=False, fig=11, id='Plot'):
     ax.legend(loc='upper right')
 
 # --------------------------------------------------------------------------
-def plot_plmap(input, mode='custom', flog=False, xi=0, yi=2, zi=6, id='Plot'):
+def plot_plmap(input, mode='custom', flog=False, xi=0, yi=2, zi=6, id='Plot',invxy=False):
     """
     Plots a PL map (2D spatial scan) from the input data.
 
@@ -64,6 +64,7 @@ def plot_plmap(input, mode='custom', flog=False, xi=0, yi=2, zi=6, id='Plot'):
     - flog: If True, applies log10 scaling to Z axis.
     - xi, yi, zi: Custom indices if mode is 'custom'.
     - id: Identifier to label the plot.
+    - invxy=True to invert xy on pl map
     """
     v = readfile(input, encoding='latin1', multi_sweep='force')
     fig, ax = plt.subplots()
@@ -75,12 +76,13 @@ def plot_plmap(input, mode='custom', flog=False, xi=0, yi=2, zi=6, id='Plot'):
     }.get(mode, (xi, yi, zi))
 
     Z = np.log10(v[z_index]) if flog else v[z_index]
-    plmap = ax.pcolor(v[x_index], v[y_index], Z, cmap='viridis')
+    plmap = ax.pcolor(v[x_index], v[y_index], Z, cmap='plasma')
     cbar = fig.colorbar(plmap, ax=ax)
     cbar.set_label('Log10 Counts' if flog else 'Counts')
 
-    ax.invert_xaxis()
-    ax.invert_yaxis()
+    if invxy:
+        ax.invert_xaxis()
+        ax.invert_yaxis()
     ax.set_xlabel('X (µm)')
     ax.set_ylabel('Y (µm)')
     ax.set_title(f'{id}_{os.path.basename(input)}')
@@ -167,3 +169,15 @@ def plot_polarization(input, polar=True, mode='custom', flog=False, xi=0, yi=1):
     ax.set_title('Polarization dependence')
     ax.legend(loc='lower left' if polar else 'best')
     ax.grid(True)
+
+
+
+def plot_parameters(xi,yi, xr,yr): #xi adn yi center; xr and yr total x-yrange 
+    xs=xi-xr/2
+    print(f'xstart= {xs}')
+    xe=xi+xr/2
+    print(f'xend= {xe}')
+    ys=yi-yr/2
+    print(f'ystart= {ys}')
+    ye=yi+yr/2
+    print(f'yend= {ye}')

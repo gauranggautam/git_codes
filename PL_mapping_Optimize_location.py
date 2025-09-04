@@ -6,7 +6,7 @@ import time
 rm = pyvisa.ResourceManager()
 esp = rm.open_resource("GPIB1::7::INSTR")
 
-scsize=3
+scsize=1
 # === AMC Init ===
 amc = AMC.Device('amc100num-a01-0248.local')
 amc.connect()

@@ -3,7 +3,7 @@ import time, os, AMC
 from snAPI.Main import *
 
 # === Config ===
-X_START, X_END, Y_START, Y_END, STEP = -20, 20, -20, 20, 1
+X_START, X_END, Y_START, Y_END, STEP = -10, 10, -360, -340, 0.2
 timestamp = time.strftime('%Y_%m_%d_%H_%M_%S')
 out_dir = './PlotBasic/Output/PLmaps'
 os.makedirs(out_dir, exist_ok=True)
@@ -80,6 +80,7 @@ def wait_until_stable(axx=None):
 # === Scan ===
 max_int, best_x, best_y = 0, X_START, Y_START
 global_max = 1
+global_min = 1000
 total_points = len(x_pos) * len(y_pos)
 point_counter = 0
 start_time = time.time()
@@ -108,9 +109,9 @@ for i, x in enumerate(x_pos):
             # === Global max color scaling ===
 
             global_max = max(global_max, total)
-            global_log_max = np.log10(global_max + 1)
+            global_min = min(global_min, total)
             img1.set_data(Z)
-            img1.set_clim(vmin=0, vmax=global_max)
+            img1.set_clim(vmin=global_min, vmax=global_max)
             cb1.update_normal(img1)
             ax1.set_title(f'PL Map – Max: {max_int:.0f} at ({best_x:.2f}, {best_y:.2f})')
             plt.pause(0.01)

@@ -5,12 +5,16 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import AMC
 
+logf=True
 # === Load data ===
 def load_data(filepath):
     data = np.loadtxt(filepath, comments='#', delimiter='\t')
     x_req = data[:, 0]
     y_req = data[:, 1]
-    total = data[:, 6]
+    if logf:
+        total = np.log10(data[:, 6])
+    else:
+        total = data[:, 6]
     return x_req, y_req, total
 
 # === Build grid ===
