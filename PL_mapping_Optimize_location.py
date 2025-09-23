@@ -6,7 +6,7 @@ import time
 rm = pyvisa.ResourceManager()
 esp = rm.open_resource("GPIB1::7::INSTR")
 
-scsize=1
+scsize=2
 # === AMC Init ===
 amc = AMC.Device('amc100num-a01-0248.local')
 amc.connect()
@@ -18,7 +18,7 @@ y_now = amc.move.getPosition(2) / 1000
 
 
 
-X_START, X_END, Y_START, Y_END, STEP = x_now-scsize, x_now+scsize, y_now-scsize, y_now+scsize, 0.2
+X_START, X_END, Y_START, Y_END, STEP = x_now-scsize, x_now+scsize, y_now-scsize, y_now+scsize, 0.1
 timestamp = time.strftime('%Y_%m_%d_%H_%M_%S')
 out_dir = './PlotBasic/Output/PLmaps'
 os.makedirs(out_dir, exist_ok=True)

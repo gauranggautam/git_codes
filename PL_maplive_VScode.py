@@ -16,7 +16,7 @@ invxy=False
 def load_data(filepath):
     data = np.loadtxt(filepath, comments='#', delimiter='\t')
     x_req = data[:, 0]
-    y_req = data[:, 2]
+    y_req = data[:, 1]
     if logf:
         total = np.log10(data[:, 6])
     else:

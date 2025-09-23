@@ -24,7 +24,8 @@ f_now = amc.move.getPosition(1) / 1000
 (x3,y3,f3) = (0,0,f_now)
 
 #F range
-f_START, f_END = f_now - SC_SIZE, f_now + SC_SIZE
+f_START, f_END = f_now - FOCUS_RANGE, f_now + FOCUS_RANGE
+
 # === snAPI Init ===
 sn = snAPI(libType=LibType.MH)
 sn.closeDevice()
@@ -44,17 +45,14 @@ else:
 
 # === Wait Until Stable ===
 def wait_until_stable(timeout=10):
-    moving=True
     import time
     start = time.time()
     while True:
         if all(amc.status.getStatusMoving(a) == 0 for a in [0, 1, 2]) and \
         all(amc.status.getStatusTargetRange(a) for a in [0, 1, 2]):
-            moving=False
             break
         for a in [0, 1, 2]: amc.control.setControlOutput(a, True); amc.control.setControlMove(a, True)
         if time.time() - start > timeout:
-            moving=False
             break
         time.sleep(0.01)
         

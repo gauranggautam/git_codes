@@ -24,6 +24,10 @@ def _set_tab20_cycle(ax):
         ax._color_cycle_set = True
 
 # --------------------------------------------------------------------------
+
+#def laser(mode='cw', cw_power=0, temp=None, softlock=None)
+
+
 def plot_spectrum(input, compare=False, fig=11, id='Plot'):
     """
     Plots the photoluminescence (PL) spectrum from the input file.
